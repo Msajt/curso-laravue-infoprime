@@ -4,12 +4,12 @@
 		<span slot="menu_esquerdo">
 			<div class="row valign-wrapper">
 				<GridVue size=4>
-					<img :src="userData.image" :alt="userData.name" class="circle responsive-img">
+					<img :src="pageOwner.image" :alt="userData.name" class="circle responsive-img">
 					<!-- notice the "circle" class -->
 				</GridVue>
 				<GridVue size="8">
 					<span class="black-text">
-						<h5>{{ userData.name }}</h5>
+						<h5>{{ pageOwner.name }}</h5>
 						Descrição do usuário, testando o conteúdo
 					</span>
 				</GridVue>
@@ -41,12 +41,16 @@ import SiteTemplate from '@/templates/SiteTemplate';
 import GridVue from '@/components/layout/GridVue'
 
 export default {
-	name: 'Home',
+	name: 'Pagina',
 	data() {
 		return {
 			userData: false,
 			nextPageUrl: null,
-			stopPagination: false
+			stopPagination: false,
+			pageOwner: {
+				image: '',
+				name: ''
+			}
 		}
 	},
 	created() {
@@ -54,12 +58,13 @@ export default {
 		if (userAux) {
 			this.userData = this.$store.getters.getUser; // Transforma em objeto
 			// Buscando informações do usuário
-			this.$http.get(`${this.$urlAPI}content/list`, { "headers": { "authorization": "Bearer " + this.$store.getters.getToken } })
+			this.$http.get(`${this.$urlAPI}content/page/list/`+this.$route.params.id, { "headers": { "authorization": "Bearer " + this.$store.getters.getToken } })
 				.then(response => {
 					//console.log(response);
 					if (response.data.status) {
 						this.$store.commit('setTimelineContents', response.data.contents.data);
 						this.nextPageUrl = response.data.contents.next_page_url;
+						this.pageOwner = response.data.owner;
 					}
 				})
 				.catch(e => {

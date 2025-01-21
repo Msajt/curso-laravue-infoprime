@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Content;
+use App\User;
 
 class ContentController extends Controller
 {
@@ -95,5 +96,29 @@ class ContentController extends Controller
         } else {
             return ["status" => false, "error" => "Conteúdo não existe"];
         }
+    }
+
+    public function page($id, Request $request)
+    {
+        $owner = User::find($id);
+        if ($owner) {
+            $contents = $owner->contents()->with('user')->orderBy('date', 'DESC')->paginate(5);
+            $user = $request->user();
+
+            foreach ($contents as $key => $content) {
+                $content->totalLikes = $content->likes()->count();
+                $content->postComments = $content->comments()->with('user')->get();
+                $userLiked = $user->likes()->find($content->id);
+                if ($userLiked)
+                    $content->userLiked = true;
+                else
+                    $content->userLiked = false;
+
+            }
+            return ["status" => true, "contents" => $contents, 'owner' => $owner];
+        } else
+            return ["status" => false, "error" => "Usuário não existe"];
+
+
     }
 }

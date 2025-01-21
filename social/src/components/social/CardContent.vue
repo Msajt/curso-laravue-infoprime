@@ -24,7 +24,7 @@
                         <i class="material-icons">{{ liked }}</i>{{ likesTotal }}
                     </a>
                     <a style="cursor: pointer" @click="openComments()">
-                        <i class="material-icons">insert_comment</i>{{ postComments.length }}
+                        <i class="material-icons">insert_comment</i>{{ listComments.length }}
                     </a>
 
                 </p>
@@ -61,7 +61,8 @@ export default {
             liked: this.userLiked ? 'favorite' : 'favorite_border',
             likesTotal: this.totalLikes,
             showComments: false,
-            commentText: ''
+            commentText: '',
+            listComments: this.postComments || []
         }
     },
     methods: {
@@ -94,9 +95,9 @@ export default {
             this.$http.put(this.$urlAPI + 'content/comment/' + id, { text: this.commentText },
                 { "headers": { "authorization": "Bearer " + this.$store.getters.getToken } }
             )
-                .then(async response => {
+                .then(response => {
                     if (response.status) {
-                        await this.$store.commit('setTimelineContents', response.data.list.contents.data);
+                        this.$store.commit('setTimelineContents', response.data.list.contents.data);
                         this.commentText = ''
                     } else alert(response.data.error)
                 })

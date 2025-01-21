@@ -38,6 +38,8 @@ Route::middleware('auth:api')->get('/content/list', "ContentController@list");
 //*
 Route::middleware('auth:api')->put('/content/like/{id}', "ContentController@like");
 Route::middleware('auth:api')->put('/content/comment/{id}', "ContentController@comment");
+//* Pagina
+Route::middleware('auth:api')->get('/content/page/list/{id}', "ContentController@page");
 
 Route::get('/testes', function(){
     $user = User::find(1);
