@@ -5,12 +5,14 @@
                 <!-- Dados do usuário -->
                 <div class="row valign-wrapper">
                     <GridVue size=1>
-                        <img :src="avatar" :alt=userName class="circle responsive-img">
+                        <router-link :to="'/pagina/' + userId + '/' + $slug(userName, {lower:true})">
+                            <img :src="avatar" :alt=userName class="circle responsive-img">
+                        </router-link>
                         <!-- notice the "circle" class -->
                     </GridVue>
                     <GridVue size="11">
                         <span class="black-text">
-                            <strong>{{ userName }}</strong> - <small>{{ postDate }}</small>
+                            <strong><router-link :to="'/pagina/' + userId + '/' + $slug(userName, {lower:true})">{{ userName }}</router-link></strong> - <small>{{ postDate }}</small>
                         </span>
                     </GridVue>
                 </div>
@@ -55,7 +57,7 @@ export default {
     components: {
         GridVue,
     },
-    props: ['id', 'avatar', 'userName', 'postDate', 'totalLikes', 'userLiked', 'postComments'],
+    props: ['id', 'avatar', 'userName', 'postDate', 'totalLikes', 'userLiked', 'postComments', 'userId'],
     data() {
         return {
             liked: this.userLiked ? 'favorite' : 'favorite_border',
@@ -96,7 +98,7 @@ export default {
                 { "headers": { "authorization": "Bearer " + this.$store.getters.getToken } }
             )
                 .then(response => {
-                    if (response.status) {
+                    if (response.data.status) {
                         this.$store.commit('setTimelineContents', response.data.list.contents.data);
                         this.commentText = ''
                     } else alert(response.data.error)

@@ -18,11 +18,7 @@
               <slot name="menu_esquerdo"></slot>
             </CardMenu>
             <CardMenu>
-              <h3>Amigos</h3>
-              <li>Amigo 1</li>
-              <li>Amigo 1</li>
-              <li>Amigo 1</li>
-              <li>Amigo 1</li>
+              <slot name="menu_esquerdo_amigos"></slot>
             </CardMenu>
           </GridVue>
           <GridVue size="8">

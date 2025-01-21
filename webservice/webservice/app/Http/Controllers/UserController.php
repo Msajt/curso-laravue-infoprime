@@ -132,4 +132,33 @@ class UserController extends Controller
         $user->token = $user->createToken($user->email)->accessToken;
         return ['status' => true, 'user' => $user];
     }
+
+    public function friend(Request $request){
+        $user = $request->user();
+        $friend = User::find($request->id);
+
+        if($friend && ($user->id != $friend->id)){
+            $user->friends()->toggle($friend->id);
+            return ['status' => true, 'friends' => $user->friends];
+        }
+        else return ['status' => false, 'error' => "Usuário não existe"];
+
+        
+    }
+
+    public function listFriends(Request $request){
+        $user = $request->user();
+        if($user){
+            return ['status' => true, 'friends' => $user->friends];
+        } else ['status' => false, 'error' => "Usuário não existe"];
+    }
+
+    public function listFriendsPage($id, Request $request){
+        $user = User::find($id);
+        $loggedUser = $request->user();
+        if($user){
+            return ['status' => true, 'friends' => $user->friends, "loggedFriends" => $loggedUser->friends];
+        } else ['status' => false, 'error' => "Usuário não existe"];
+    }
+
 }

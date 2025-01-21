@@ -40,6 +40,10 @@ Route::middleware('auth:api')->put('/content/like/{id}', "ContentController@like
 Route::middleware('auth:api')->put('/content/comment/{id}', "ContentController@comment");
 //* Pagina
 Route::middleware('auth:api')->get('/content/page/list/{id}', "ContentController@page");
+//* Amigo
+Route::middleware('auth:api')->post('/user/friend', "UserController@friend");
+Route::middleware('auth:api')->get('/user/listFriends', "UserController@listFriends");
+Route::middleware('auth:api')->get('/user/listFriendsPage', "UserController@listFriendsPage");
 
 Route::get('/testes', function(){
     $user = User::find(1);
