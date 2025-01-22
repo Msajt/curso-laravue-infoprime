@@ -69,7 +69,11 @@ export default {
     },
     methods: {
         like(id) {
-            this.$http.put(this.$urlAPI + 'content/like/' + id, {},
+            let url = '';
+            if(this.$route.name == "Home") url = 'content/like/'
+            else url = 'content/likePage/'
+            
+            this.$http.put(this.$urlAPI + url + id, {},
                 { "headers": { "authorization": "Bearer " + this.$store.getters.getToken } }
             )
                 .then(response => {
@@ -94,7 +98,11 @@ export default {
         comment(id) {
             if (!this.commentText) return;
 
-            this.$http.put(this.$urlAPI + 'content/comment/' + id, { text: this.commentText },
+            let url = '';
+            if(this.$route.name == "Home") url = 'content/comment/'
+            else url = 'content/commentPage/'
+
+            this.$http.put(this.$urlAPI + url + id, { text: this.commentText },
                 { "headers": { "authorization": "Bearer " + this.$store.getters.getToken } }
             )
                 .then(response => {

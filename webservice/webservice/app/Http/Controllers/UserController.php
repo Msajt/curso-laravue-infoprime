@@ -139,7 +139,7 @@ class UserController extends Controller
 
         if($friend && ($user->id != $friend->id)){
             $user->friends()->toggle($friend->id);
-            return ['status' => true, 'friends' => $user->friends];
+            return ['status' => true, 'friends' => $user->friends, "followers" => $friend->followers];
         }
         else return ['status' => false, 'error' => "Usuário não existe"];
 
@@ -149,7 +149,7 @@ class UserController extends Controller
     public function listFriends(Request $request){
         $user = $request->user();
         if($user){
-            return ['status' => true, 'friends' => $user->friends];
+            return ['status' => true, 'friends' => $user->friends, "followers" => $user->followers];
         } else ['status' => false, 'error' => "Usuário não existe"];
     }
 
@@ -157,7 +157,7 @@ class UserController extends Controller
         $user = User::find($id);
         $loggedUser = $request->user();
         if($user){
-            return ['status' => true, 'friends' => $user->friends, "loggedFriends" => $loggedUser->friends];
+            return ['status' => true, 'friends' => $user->friends, "loggedFriends" => $loggedUser->friends, "followers" => $user->followers];
         } else ['status' => false, 'error' => "Usuário não existe"];
     }
 

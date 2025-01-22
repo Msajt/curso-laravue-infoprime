@@ -21,8 +21,16 @@
 
 		<span slot="menu_esquerdo_amigos">
 			<h3>Seguindo</h3>
-			<li v-for="item in friends" :key="item.id">{{ item.name }}</li>
+			<router-link v-for="item in friends" :key="item.id" :to="'/pagina/' + item.id + '/' + $slug(item.name, { lower: true })">
+				<li >{{ item.name }}</li>
+			</router-link>
 			<li v-if="!friends.length">Nenhum amigo</li>
+
+			<h3>Seguidores</h3>
+			<router-link v-for="item in followers" :key="item.id" :to="'/pagina/' + item.id + '/' + $slug(item.name, { lower: true })">
+				<li >{{ item.name }}</li>
+			</router-link>
+			<li v-if="!followers.length">Nenhum seguidor</li>
 		</span>
 
 		<span slot="principal">
@@ -56,7 +64,8 @@ export default {
 			userData: { image: '', name: '' },
 			nextPageUrl: null,
 			stopPagination: false,
-			friends: []
+			friends: [],
+			followers: []
 		}
 	},
 	created() {
@@ -75,6 +84,7 @@ export default {
 							.then(response => {
 								if (response.data.status) {
 									this.friends = response.data.friends;
+									this.followers = response.data.followers;
 								} else alert(response.data.error)
 							})
 							.catch(e => {
